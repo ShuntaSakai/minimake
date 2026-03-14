@@ -78,8 +78,20 @@ def main():
     # ヒント:
     # - targets: ビルドするターゲットのリスト
     # - build_file: ビルド定義ファイルのパス（デフォルト: "build.json"）
-    pass
+    if len(sys.argv) < 2:
+        print("Usage: minimake <target>... [--file build_file]", file=sys.stderr)
+        sys.exit(1)
 
+    target = sys.argv[1]
+    if len(sys.argv) > 2:
+        build_file = sys.argv[2]
+    else:
+        build_file = "build.json"
+
+    config = load_build_file(build_file)
+
+    if not build_target(config, target):
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

@@ -6,6 +6,7 @@ TODO コメントがある箇所を実装してください。
 """
 
 import sys
+import json
 
 
 def load_build_file(path: str) -> dict:
@@ -18,9 +19,8 @@ def load_build_file(path: str) -> dict:
     Returns:
         パースされた辞書
     """
-    # TODO: ここを実装してください
-    # ヒント: json.load() を使います
-    pass
+    with open(path, "r") as f:
+        return json.load(f)
 
 
 def build_target(config: dict, target: str) -> bool:

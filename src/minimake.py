@@ -25,7 +25,23 @@ def needs_rebuild(config: dict, target: str) -> bool:
     # - inputs: target_config.get("inputs", [])
     # - deps: target_config.get("deps", [])
     # - ファイルの mtime が target_mtime より大きければ再ビルドが必要
-    pass
+    for input_file in target_config.get("inputs", []):
+        input_path = Path(input_file)
+        if input_path.exists() and input_path.stat().st_mtime > target_mtime:
+            return True
+
+    # deps のチェック
+    for dep in target_config.get("deps", []):
+        if needs_rebuild(config, dep):
+            return True
+
+    # inputs のチェック
+    for input_file in target_config.get("inputs", []):
+        input_path = Path(input_file)
+        if input_path.exists() and input_path.stat().st_mtime > target_mtime:
+            return True
+
+    return False
 
 
 def build_target(config: dict, target: str) -> bool:
